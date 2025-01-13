@@ -6,8 +6,7 @@ GraspDetectionServer::GraspDetectionServer(ros::NodeHandle& node)
   cloud_camera_ = NULL;
 
   // set camera viewpoint to default origin
-  std::vector<double> camera_position;
-  node.getParam("camera_position", camera_position);
+  std::vector<double> camera_position = {0.0, 0.0, 0.0};  // 默认值
   view_point_ << camera_position[0], camera_position[1], camera_position[2];
 
   std::string cfg_file;
@@ -70,16 +69,18 @@ bool GraspDetectionServer::detectGrasps(gpd_ros::detect_grasps::Request& req, gp
   {
     PointCloudRGBA::Ptr cloud(new PointCloudRGBA);
     pcl::fromROSMsg(cloud_sources.cloud, *cloud);
+    // 多相机融合
+    // // TODO: multiple cameras can see the same point
+    // Eigen::MatrixXi camera_source = Eigen::MatrixXi::Zero(view_points.cols(), cloud->size());
+    // for (int i = 0; i < cloud_sources.camera_source.size(); i++)
+    // {
+    //   camera_source(cloud_sources.camera_source[i].data, i) = 1;
+    // }
 
-    // TODO: multiple cameras can see the same point
-    Eigen::MatrixXi camera_source = Eigen::MatrixXi::Zero(view_points.cols(), cloud->size());
-    for (int i = 0; i < cloud_sources.camera_source.size(); i++)
-    {
-      camera_source(cloud_sources.camera_source[i].data, i) = 1;
-    }
-
-    cloud_camera_ = new gpd::util::Cloud(cloud, camera_source, view_points);
+    // cloud_camera_ = new gpd::util::Cloud(cloud, camera_source, view_points);
+    cloud_camera_ = new gpd::util::Cloud(cloud, 0, view_points);
     std::cout << "view_points:\n" << view_points << "\n";
+    ROS_INFO_STREAM("Received cloud with " << cloud_camera_->getCloudProcessed()->size() << " points.");
   }
 
   // Set the indices at which to sample grasp candidates.
@@ -127,7 +128,7 @@ int main(int argc, char** argv)
 
   // initialize ROS
   ros::init(argc, argv, "detect_grasps_server");
-  ros::NodeHandle node("~");
+  ros::NodeHandle node;
 
   GraspDetectionServer grasp_detection_server(node);
 

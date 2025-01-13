@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <memory>
 #include <vector>
+#include <bits/stdc++.h>
 
 // ROS
 #include <eigen_conversions/eigen_msg.h>
@@ -92,7 +93,7 @@ public:
   */
   ~GraspDetectionNode()
   {
-    delete cloud_camera_;
+    // delete cloud_camera_;
 //    delete importance_sampling_;
     delete grasp_detector_;
     delete rviz_plotter_;
@@ -156,6 +157,9 @@ private:
   Eigen::Vector3d view_point_; ///< (input) view point of the camera onto the point cloud
 
   gpd::util::Cloud* cloud_camera_; ///< stores point cloud with (optional) camera information and surface normals
+  // 使用 std::unique_ptr 代替裸指针
+  // std::unique_ptr<gpd::util::Cloud> cloud_camera_;
+
   std_msgs::Header cloud_camera_header_; ///< stores header of the point cloud
 
   int size_left_cloud_; ///< (input) size of the left point cloud (when using two point clouds as input)

@@ -11,8 +11,8 @@ GraspDetectionNode::GraspDetectionNode(ros::NodeHandle& node) : has_cloud_(false
   size_left_cloud_(0), has_samples_(true), frame_(""), use_importance_sampling_(false)
 {
   printf("Init ....\n");
-  cloud_camera_ = NULL;
-
+  // cloud_camera_ = std::make_unique<gpd::util::Cloud>();
+  cloud_camera_ = nullptr;
   // set camera viewpoint to default origin
 //  std::vector<double> camera_position;
 //  node.getParam("camera_position", camera_position);
@@ -148,8 +148,8 @@ void GraspDetectionNode::cloud_callback(const sensor_msgs::PointCloud2& msg)
 {
   if (!has_cloud_)
   {
-    delete cloud_camera_;
-    cloud_camera_ = NULL;
+   // delete cloud_camera_;
+    cloud_camera_ = nullptr;
 
     Eigen::Matrix3Xd view_points(3,1);
     view_points.col(0) = view_point_;
@@ -247,8 +247,8 @@ void GraspDetectionNode::samples_callback(const gpd_ros::SamplesMsg& msg)
 void GraspDetectionNode::initCloudCamera(const gpd_ros::CloudSources& msg)
 {
   // clean up
-  delete cloud_camera_;
-  cloud_camera_ = NULL;
+ // delete cloud_camera_;
+  // cloud_camera_ = nullptr;
 
   // Set view points.
   Eigen::Matrix3Xd view_points(3, msg.view_points.size());
