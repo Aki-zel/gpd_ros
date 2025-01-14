@@ -1,9 +1,9 @@
 <launch>
-  <param name="config_file" value="/home/ydt/gpd/cfg/ros_eigen_params.cfg" />
+  <param name="config_file" value="/home/yde/robot_arm_moveit/src/gpd_ros/launch/ros_eigen_params.cfg" />
   <param name="rviz_topic" value="grasp_viz_topic" />
   <node name="detect_grasps_server" pkg="gpd_ros" type="detect_grasps_server" output="screen">
 
-    <param name="config_file" value="/home/ydt/gpd/cfg/ros_eigen_params.cfg" />
+    <param name="config_file" value="/home/yde/robot_arm_moveit/src/gpd_ros/launch/ros_eigen_params.cfg" />
     <param name="rviz_topic" value="grasp_viz_topic" />
   </node>
 </launch>
